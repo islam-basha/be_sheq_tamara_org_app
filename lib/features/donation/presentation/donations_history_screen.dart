@@ -16,7 +16,7 @@ class _DonationsHistoryState extends State<DonationsHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: const MyAppBar(),
       body: Directionality(
         textDirection: TextDirection.rtl,
         child: SingleChildScrollView(
