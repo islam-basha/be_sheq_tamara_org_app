@@ -1,11 +1,11 @@
 import 'package:be_sheq_tamara_org_app/features/authentication/presentation/profile_screen.dart';
 import 'package:be_sheq_tamara_org_app/features/authentication/presentation/sign_in_screen.dart';
-import 'package:be_sheq_tamara_org_app/features/donation/presentation/donations_history_screen.dart';
 import 'package:be_sheq_tamara_org_app/features/messages/presentation/messages_screen.dart';
 import 'package:be_sheq_tamara_org_app/features/notifications/presentation/notifications_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import '../features/authentication/presentation/edit_profile_screen.dart';
+import '../features/history/presentation/donations_history_screen.dart';
 import '../features/primary/presentation/bottom_nav_bar.dart';
 import '../features/primary/presentation/first_screen.dart';
 
