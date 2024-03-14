@@ -1,3 +1,4 @@
+import 'package:be_sheq_tamara_org_app/features/addition/presentation/add_page.dart';
 import 'package:be_sheq_tamara_org_app/features/authentication/presentation/profile_screen.dart';
 import 'package:be_sheq_tamara_org_app/features/authentication/presentation/sign_in_screen.dart';
 import 'package:be_sheq_tamara_org_app/features/messages/presentation/messages_screen.dart';
@@ -40,9 +41,9 @@ GoRouter appRoute(){
                 navigatorKey: _donateNavigatorKey ,
                 routes: [
                   GoRoute(
-                      path: '/donate',
-                      name: 'donate',
-                      builder: (context, state) =>  const Profile(),)
+                      path: '/add',
+                      name: 'add',
+                      builder: (context, state) =>  const AddPage(),)
                 ]),
             StatefulShellBranch(
                 navigatorKey: _homeNavigatorKey ,
