@@ -43,7 +43,7 @@ GoRouter appRoute(){
                   GoRoute(
                       path: '/add',
                       name: 'add',
-                      builder: (context, state) =>  const AddPage(),)
+                      builder: (context, state) =>   AddPage(),)
                 ]),
             StatefulShellBranch(
                 navigatorKey: _homeNavigatorKey ,
@@ -83,5 +83,10 @@ GoRouter appRoute(){
           name:  'messages',
           builder:(context, state) =>  const Messages(),
         ),
+        // GoRoute(
+        //   path: '/add',
+        //   name: 'add',
+        //   builder: (context, state) =>   AddPage(),)
+
       ]);
 }
