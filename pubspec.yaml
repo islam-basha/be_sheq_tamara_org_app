@@ -38,6 +38,8 @@ dependencies:
   cupertino_icons: ^1.0.6
   image_picker: ^0.8.4+4
   motion_toast: ^2.8.0
+  dio: ^5.4.1
+  loading_animation_widget: ^1.2.1
 
 
 

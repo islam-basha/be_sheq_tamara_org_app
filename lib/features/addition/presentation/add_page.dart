@@ -153,12 +153,12 @@ class _AddPageState extends State<AddPage> {
                 selectedContainerIndex == 1
                     ? Container(
                         width: 322,
-                        height: 506,
                         decoration: BoxDecoration(
                             border: Border.all(
                           width: 1,
                           color: mainGreen,
-                        )),
+                        ),
+                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15),bottomRight: Radius.circular(15))),
                         child: Padding(
                           padding: const EdgeInsets.all(20.0),
                           child: SingleChildScrollView(
@@ -364,7 +364,7 @@ class _AddPageState extends State<AddPage> {
                                 ),
                                 ImageField(),
                                 const SizedBox(
-                                  height: 50,
+                                  height: 10,
                                 ),
                                 Center(
                                     child: defaultButton(
@@ -382,21 +382,22 @@ class _AddPageState extends State<AddPage> {
                 selectedContainerIndex == 0
                     ? Container(
                         width: 322,
-                        height: 506,
+
                         decoration: BoxDecoration(
                             border: Border.all(
                           width: 1,
                           color: mainGreen,
-                        )),
+                        ),
+                            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15),bottomRight: Radius.circular(15))
+
+                ),
                         child: Padding(
                           padding: const EdgeInsets.all(20.0),
                           child: SingleChildScrollView(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const SizedBox(
-                                  height: 8,
-                                ),
+
                                 const Text(
                                   'بماذا تودّ أن تتبرّع؟',
                                   style: TextStyle(
@@ -569,7 +570,7 @@ class _AddPageState extends State<AddPage> {
                                   ),
                                 ),
                                 const SizedBox(
-                                  height: 50,
+                                  height: 10,
                                 ),
                                 Center(
                                     child: defaultButton(
@@ -587,13 +588,13 @@ class _AddPageState extends State<AddPage> {
                 selectedContainerIndex == 2
                     ? Container(
                         width: 322,
-                        height: 506,
                         decoration: BoxDecoration(
                             border: Border.all(
                           width: 1,
                           color: mainGreen,
-                        )),
-                        child: Padding(
+                        ),
+                            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15),bottomRight: Radius.circular(15))),
+                      child: Padding(
                           padding: const EdgeInsets.all(20.0),
                           child: SingleChildScrollView(
                             child: Column(
@@ -603,7 +604,7 @@ class _AddPageState extends State<AddPage> {
                                   height: 10,
                                 ),
                                 const Text(
-                                  'عنون المنشور ',
+                                  'عنوان المنشور ',
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500),
@@ -694,7 +695,7 @@ class _AddPageState extends State<AddPage> {
                                 ),
                                 ImageField(),
                                 const SizedBox(
-                                  height: 100,
+                                  height: 20,
                                 ),
                                 Center(
                                     child: defaultButton(
