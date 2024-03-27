@@ -4,8 +4,11 @@ import '../../../../Constants/Color_Constants.dart';
 import '../../../../common_widgets/default_button.dart';
 
 class Posts extends StatelessWidget {
-  const Posts({super.key});
-
+  const Posts({required this.post_image,required this.post_title,required this.post_text,required this.post_date,super.key});
+  final String post_image;
+  final String post_title;
+  final String post_date;
+  final String post_text;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -15,20 +18,27 @@ class Posts extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
-              child: Image.asset(
-                "asset/images/newsImage1.png",
-                width: 312,
+              child: Container(
                 height: 200,
+                width: 300,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10)
+                ),
+                child: Image.network(
+                  post_image,
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "طلب تبرع | قصة نجاح ",
+                  post_title,
                   style: TextStyle(fontSize: 14, color: secondaryBeige),
                 ),
-                Text(" 2023/12/29 ",
+                Text(post_date,
                     style: TextStyle(
                         fontSize: 14, color: Color(0xff95989A))),
               ],
@@ -36,22 +46,7 @@ class Posts extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            Align(
-                alignment: Alignment.topRight,
-                child: Text(
-                  "من أنجح الوسائل التعليمية سؤالٌ وجواب",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600, fontSize: 14,color: secondaryGreen),
-                )),
-            Text("اسألوا أطفالكم، ثم ادعموهم بالأجوبة الصحيحة بعد طباعتكم للصور وانشروا الخير واحتسِبوا أجور تعليم النّشأ!",style: TextStyle(fontSize: 14,),),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: GestureDetector(
-                  child: const Text(
-                    "قراءة المزيد",
-                    style: TextStyle( fontSize: 14,color: secondaryBeige),
-                  )),
-            ),
+            Text(post_text,style: TextStyle(fontSize: 14,),),
             defaultButton(radius: 10, function: (){}, text: 'حذف',background: Colors.redAccent,width: 90),
             Divider(color: Colors.grey.shade300,)
           ],

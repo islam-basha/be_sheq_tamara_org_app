@@ -17,7 +17,7 @@ class Notifications extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children:
-            List.generate(3, (index) => Container(
+            List.generate(1, (index) => Container(
               width: double.infinity,
               padding: EdgeInsets.all(15),
               child: Column(

@@ -1,56 +1,99 @@
+import 'package:be_sheq_tamara_org_app/features/messages/domain/messages_model.dart';
+import 'package:be_sheq_tamara_org_app/features/messages/presentation/providers/message_provider.dart';
+import 'package:be_sheq_tamara_org_app/features/messages/presentation/widgets/message_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import '../../../Constants/Color_Constants.dart';
+import '../../primary/domain/users_model.dart';
+import '../../primary/presentation/providers/users_provider.dart';
 
-class Messages extends StatelessWidget {
+String _userName='unknown';
+
+class Messages extends ConsumerStatefulWidget {
   const Messages({super.key});
 
   @override
+  ConsumerState<Messages> createState() => _MessagesState();
+}
+
+class _MessagesState extends ConsumerState<Messages> {
+  @override
   Widget build(BuildContext context) {
+
+    var messagesDataNotifier = ref.watch(messagesNotifier);
+    var messagesData = ref.read(messagesNotifier.notifier);
+
+    var usersDataNotifier = ref.watch(usersNotifier);
+    var usersData = ref.read(usersNotifier.notifier);
+
     return  Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
-        title: Text('الرسائــل',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),),
+        title: const Text('الرسائــل',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),),
         centerTitle: true,
       ),
       body: Directionality(
         textDirection: TextDirection.rtl,
         child: SingleChildScrollView(
-          child: Column(
-            children: List.generate(5, (index) => Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+          child:messagesDataNotifier.when(
+              data: (_){
+                List<MessageModel> messages=messagesData.messagesList!;
+                return usersDataNotifier.when(
+                    data: (_){
+                      List<UserModel> users=usersData.usersList!;
+                      return Column(
+                        children: List.generate(messages.length, (index) {
+                          for(var user in users){
+                            if(messages[index].userId==user.id) {
+                              _userName=user.fullName;
+                            }
+                          }
+                         return MessageWidget(name: _userName, date:  messages[index].date, message:  messages[index].msg);
+                        }
+                        ),
+                      );
+                    },
+                    error: (Object error, StackTrace stackTrace) {
+                      return Center(
+                        child: Column(
+                          children: [
+                            Image.asset('asset/images/website.png'),
+                            const Text(
+                              'حدث خطأ ما! أعِد تحميل الصفحة أو حاول في وقتٍ لاحق.. نعتذر من حضرتكم على هذا.',
+                              style: TextStyle(fontSize: 24,fontWeight: FontWeight.w600,color: secondaryGreen),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    loading: () {
+                      return Center(
+                        child: LoadingAnimationWidget.threeRotatingDots(color: mainGreen, size: 40),
+                      );
+                    }
+                    );
+              },
+              error: (Object error, StackTrace stackTrace) {
+                return Center(
+                  child: Column(
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: Image.asset('asset/images/profile_pic.jpg',width: 50,height: 50,),
+                      Image.asset('asset/images/website.png'),
+                      const Text(
+                        'حدث خطأ ما! أعِد تحميل الصفحة أو حاول في وقتٍ لاحق.. نعتذر من حضرتكم على هذا.',
+                        style: TextStyle(fontSize: 24,fontWeight: FontWeight.w600,color: secondaryGreen),
                       ),
-                      SizedBox(width: 5,),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('إسلام عادل',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500),),
-                          Text('2024/12/12',style: TextStyle(color: Colors.grey),),
-                        ],
-                      )
                     ],
                   ),
-                  Container(
-                    constraints: BoxConstraints(maxWidth: 340),
-                    child: Text(' السلام عليكم ورحمة الله أقبل قمرك بعد غياب للجنة فتحت أبواب بهجة قلبي صفا روحي رحمة ربي بدون عذاب أهلا أهلا يارمضان ',
-                    style: TextStyle(fontSize: 14,fontWeight: FontWeight.w300),),
-                  ),
-                  SizedBox(height: 5,),
-                  Divider(color: Colors.grey.shade200,),
-                ],
-              ),
-            )),
+                );
+              },
+              loading: () {
+                return Center(
+                  child: LoadingAnimationWidget.threeRotatingDots(color: mainGreen, size: 40),
+                );
+              }
           ),
+
         ),
       ),
     );
