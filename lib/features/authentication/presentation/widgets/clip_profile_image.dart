@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ClipImage extends StatefulWidget {
-  const ClipImage({super.key});
+  final String imagePath;
+  const ClipImage({required this.imagePath,super.key});
 
   @override
   _ClipImageState createState() => _ClipImageState();
@@ -42,9 +43,9 @@ class _ClipImageState extends State<ClipImage> {
                       BoxShadow(color: Colors.grey.shade300,blurRadius:10,offset: const Offset(0, 5) )
                     ]
                 ),
-                child: const CircleAvatar(
+                child:  CircleAvatar(
                     radius: 100,
-                    backgroundImage: AssetImage('asset/images/haya.png')
+                    backgroundImage: NetworkImage(widget.imagePath)
                 ),
               ),
             ),

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageField extends StatefulWidget {
+  const ImageField({super.key});
+
   @override
   _ImageFieldState createState() => _ImageFieldState();
 }
@@ -47,15 +49,8 @@ class _ImageFieldState extends State<ImageField> {
             height: 30,
             fit: BoxFit.cover,
           )
-              : Icon(
-                          Icons.create_new_folder_rounded,
-                          color: mainBeige,
-                          size: 20
-            ,
-                        ),
-
+              : const Icon(Icons.create_new_folder_rounded, color: mainBeige, size: 20,),
         ),
-
       ),
     );
   }

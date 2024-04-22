@@ -1,5 +1,6 @@
 import 'package:be_sheq_tamara_org_app/app/core/api/end_points.dart';
 import 'package:be_sheq_tamara_org_app/common_widgets/app_bar.dart';
+import 'package:be_sheq_tamara_org_app/features/history/data/history_repository.dart';
 import 'package:be_sheq_tamara_org_app/features/history/domain/campaigns_model.dart';
 import 'package:be_sheq_tamara_org_app/features/history/domain/donations_model.dart';
 import 'package:be_sheq_tamara_org_app/features/history/domain/participations_model.dart';
@@ -17,7 +18,9 @@ import 'package:be_sheq_tamara_org_app/features/primary/presentation/providers/u
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:motion_toast/motion_toast.dart';
 import '../../../Constants/Color_Constants.dart';
+import '../../../app/org_data.dart';
 
 int _index=1;
 String _userName='unknown';
@@ -33,17 +36,20 @@ class _DonationsHistoryState extends ConsumerState<OrganizationHistory> {
   @override
   Widget build(BuildContext context) {
 
-    var postsDataNotifier = ref.watch(postsNotifier);
-    var postsData = ref.read(postsNotifier.notifier);
+    final orgIdProvider= ref.read(orgIdNotifier.notifier);
+    ref.watch<OrgData>(orgIdNotifier);
 
-    var partsDataNotifier = ref.watch(participationsNotifier);
-    var partsData = ref.read(participationsNotifier.notifier);
+    var postsDataNotifier = ref.watch(postsNotifier(orgIdProvider.orgId));
+    var postsData = ref.read(postsNotifier(orgIdProvider.orgId).notifier);
 
-    var donationsDataNotifier = ref.watch(donationsNotifier);
-    var donationsData = ref.read(donationsNotifier.notifier);
+    var partsDataNotifier = ref.watch(participationsNotifier(orgIdProvider.orgId));
+    var partsData = ref.read(participationsNotifier(orgIdProvider.orgId).notifier);
 
-    var campsDataNotifier = ref.watch(campaignsNotifier);
-    var campsData = ref.read(campaignsNotifier.notifier);
+    var donationsDataNotifier = ref.watch(donationsNotifier(orgIdProvider.orgId));
+    var donationsData = ref.read(donationsNotifier(orgIdProvider.orgId).notifier);
+
+    var campsDataNotifier = ref.watch(campaignsNotifier(orgIdProvider.orgId));
+    var campsData = ref.read(campaignsNotifier(orgIdProvider.orgId).notifier);
 
     var usersDataNotifier = ref.watch(usersNotifier);
     var usersData = ref.read(usersNotifier.notifier);
@@ -67,6 +73,7 @@ class _DonationsHistoryState extends ConsumerState<OrganizationHistory> {
                           setState(() {
                             _index=1;
                           });
+                          ref.invalidate(donationsNotifier(orgIdProvider.orgId));
                         },
                         child: Container(
                           width: 160,
@@ -84,7 +91,7 @@ class _DonationsHistoryState extends ConsumerState<OrganizationHistory> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('عدد التبرعات :', style: TextStyle(fontSize: 14),),
+                                  const Text('عدد التبرعات :', style: TextStyle(fontSize: 14),),
                                   donationsDataNotifier.when(
                                       data: (_){
                                         String _num=donationsData.donationsList!.length.toString();
@@ -111,6 +118,7 @@ class _DonationsHistoryState extends ConsumerState<OrganizationHistory> {
                           setState(() {
                             _index=2;
                           });
+                          ref.invalidate(participationsNotifier(orgIdProvider.orgId));
                         },
                         child: Container(
                           width: 160,
@@ -131,8 +139,13 @@ class _DonationsHistoryState extends ConsumerState<OrganizationHistory> {
                                   Text('عدد المشاركات :', style: TextStyle(fontSize: 14),),
                                   partsDataNotifier.when(
                                       data: (_){
-                                    String _num=partsData.participationsList!.length.toString();
-                                    return Text(_num+' مشاركة', style: TextStyle(fontSize: 14),);
+                                        if(partsData.participationsList==null){
+                                          return Text('0 مشاركة', style: TextStyle(fontSize: 14),);
+                                        }else{
+                                          String _num=partsData.participationsList!.length.toString();
+                                          return Text(_num+' مشاركة', style: TextStyle(fontSize: 14),);
+                                        }
+
                                   },
                                       error: (Object error, StackTrace stackTrace){
                                        return Text('/'+' مشاركة', style: TextStyle(fontSize: 14),);
@@ -154,7 +167,7 @@ class _DonationsHistoryState extends ConsumerState<OrganizationHistory> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 10,),
+                  const SizedBox(height: 10,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -164,6 +177,7 @@ class _DonationsHistoryState extends ConsumerState<OrganizationHistory> {
                           setState(() {
                             _index=3;
                           });
+                          ref.invalidate(postsNotifier(orgIdProvider.orgId));
                         },
                         child: Container(
                           width: 160,
@@ -208,6 +222,7 @@ class _DonationsHistoryState extends ConsumerState<OrganizationHistory> {
                           setState(() {
                             _index=4;
                           });
+                          ref.invalidate(campaignsNotifier(orgIdProvider.orgId));
                         },
                         child: Container(
                           width: 160,
@@ -316,13 +331,17 @@ class _DonationsHistoryState extends ConsumerState<OrganizationHistory> {
                   if(_index==2)
                     partsDataNotifier.when(
                         data: (_){
-                      List<ParticipationModel> parts=partsData.participationsList!;
-                      return Wrap(
-                        children: List.generate(parts.length, (index) =>
-                            Participations(parId: parts[index].participationId, parName: parts[index].userName,
-                                campName: parts[index].campName, campDate: parts[index].campDate)
-                        ),
-                      );
+                          if(partsData.participationsList==null){
+                            return Container();
+                          }else{
+                            List<ParticipationModel> parts=partsData.participationsList!;
+                            return Wrap(
+                              children: List.generate(parts.length, (index) =>
+                                  Participations(parId: parts[index].participationId, parName: parts[index].userName,
+                                      campName: parts[index].campName, campDate: parts[index].campDate)
+                              ),
+                            );
+                          }
                     },
                         error: (Object error, StackTrace stackTrace) {
                           return Center(
@@ -349,8 +368,22 @@ class _DonationsHistoryState extends ConsumerState<OrganizationHistory> {
                         data: (_){
                           List<PostModel> posts=postsData.postsList!;
                           return Wrap(
-                            children: List.generate(posts.length, (index) => Posts(post_title: posts[index].postTitle,
-                              post_text: posts[index].postText,post_image:EndPoints.BASEURL+posts[index].image,post_date: posts[index].date,)),
+                            children: List.generate(posts.length, (index) =>
+                                Posts(post_title: posts[index].postTitle, post_text: posts[index].postText,
+                                  post_image:EndPoints.BASEURL+posts[index].image,post_date: posts[index].date,
+                                function: () async{
+                                  try{
+                                    await HistoryRepository().deletePost(posts[index].id);
+                                    MotionToast.delete(
+                                      description:  const Text("تمت عملية الحذف بنجاح",textDirection:TextDirection.rtl,),
+                                      layoutOrientation: ToastOrientation.rtl,
+                                      iconSize: 50,
+                                    ).show(context);
+                                    ref.invalidate(postsNotifier(orgIdProvider.orgId));
+                                  }catch(e){
+                                    print(e);
+                                  }
+                                },)),
                           );
                         },
                         error: (Object error, StackTrace stackTrace) {
@@ -380,7 +413,20 @@ class _DonationsHistoryState extends ConsumerState<OrganizationHistory> {
                           return Wrap(
                             children: List.generate(campaigns.length, (index) =>
                                 Campaigns(image_url: EndPoints.BASEURL+campaigns[index].campImage,title:campaigns[index].campTitle,
-                                desc: campaigns[index].campDec,location: campaigns[index].location,date: campaigns[index].startDate,)),
+                                desc: campaigns[index].campDec,location: campaigns[index].location,date: campaigns[index].startDate,
+                                   function:  () async{
+                                  try{
+                                    await HistoryRepository().deleteCamp(campaigns[index].id);
+                                    MotionToast.delete(
+                                      description:  const Text("تمت عملية الحذف بنجاح",textDirection:TextDirection.rtl,),
+                                      layoutOrientation: ToastOrientation.rtl,
+                                      iconSize: 50,
+                                    ).show(context);
+                                    ref.invalidate(campaignsNotifier(orgIdProvider.orgId));
+                                  }catch(e){
+                                    print(e);
+                                  }
+                                   },)),
                           );
                         },
                         error: (Object error, StackTrace stackTrace) {

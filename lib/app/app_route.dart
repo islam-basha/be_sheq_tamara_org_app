@@ -4,6 +4,7 @@ import 'package:be_sheq_tamara_org_app/features/authentication/presentation/sign
 import 'package:be_sheq_tamara_org_app/features/messages/presentation/messages_screen.dart';
 import 'package:be_sheq_tamara_org_app/features/notifications/presentation/notifications_screen.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../features/authentication/presentation/edit_profile_screen.dart';
 import '../features/history/presentation/organization_history_screen.dart';
@@ -16,7 +17,7 @@ final _homeNavigatorKey = GlobalKey<NavigatorState>();
 final _donateNavigatorKey = GlobalKey<NavigatorState>();
 final _profileNavigatorKey = GlobalKey<NavigatorState>();
 
-//final goRouterProvider=Provider((ref) => appRoute());
+final goRouterProvider=Provider((ref) => appRoute());
 
 GoRouter appRoute(){
   return GoRouter(

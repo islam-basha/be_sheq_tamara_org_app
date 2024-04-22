@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class TextFieldForSinIn extends StatelessWidget {
   final String labelText;
   final IconData icon;
+  final TextEditingController controller;
 
-  const TextFieldForSinIn({super.key,  required this.labelText, required this.icon});
+  const TextFieldForSinIn({super.key,required this.controller , required this.labelText, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +21,10 @@ class TextFieldForSinIn extends StatelessWidget {
         children: [
           Expanded(
             child: TextField(
+              controller: controller,
+              onTapOutside: (event) => FocusManager
+                  .instance.primaryFocus
+                  ?.unfocus(),
               textAlign: TextAlign.right,
               decoration: InputDecoration(
                 border: InputBorder.none,

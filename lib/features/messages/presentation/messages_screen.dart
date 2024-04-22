@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../../Constants/Color_Constants.dart';
+import '../../../app/org_data.dart';
 import '../../primary/domain/users_model.dart';
 import '../../primary/presentation/providers/users_provider.dart';
 
@@ -21,8 +22,11 @@ class _MessagesState extends ConsumerState<Messages> {
   @override
   Widget build(BuildContext context) {
 
-    var messagesDataNotifier = ref.watch(messagesNotifier);
-    var messagesData = ref.read(messagesNotifier.notifier);
+    final orgIdProvider= ref.read(orgIdNotifier.notifier);
+    ref.watch<OrgData>(orgIdNotifier);
+
+    var messagesDataNotifier = ref.watch(messagesNotifier(orgIdProvider.orgId));
+    var messagesData = ref.read(messagesNotifier(orgIdProvider.orgId).notifier);
 
     var usersDataNotifier = ref.watch(usersNotifier);
     var usersData = ref.read(usersNotifier.notifier);
@@ -32,6 +36,11 @@ class _MessagesState extends ConsumerState<Messages> {
         scrolledUnderElevation: 0.0,
         title: const Text('الرسائــل',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),),
         centerTitle: true,
+        actions: [
+          IconButton(onPressed: (){
+            ref.invalidate(messagesNotifier(orgIdProvider.orgId));
+          }, icon:const Icon(Icons.refresh) )
+        ],
       ),
       body: Directionality(
         textDirection: TextDirection.rtl,
