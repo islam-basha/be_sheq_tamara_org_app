@@ -14,9 +14,7 @@ class HistoryRepository{
   HistoryRepository._();
 
   factory HistoryRepository() {
-    if (_instance == null) {
-      _instance = HistoryRepository._();
-    }
+    _instance ??= HistoryRepository._();
     return _instance!;
   }
 
@@ -79,4 +77,29 @@ class HistoryRepository{
       print(failure);
     }
   }
+
+  Future deleteCamp(String campId) async {
+    try {
+      return await ApiManager.dio.get(
+        "${EndPoints.DELETE_CAMP}$campId",
+      ).then((response) {
+        return ;
+      });
+    } on Exception catch (failure) {
+      print(failure);
+    }
+  }
+
+  Future deletePost(String postId) async {
+    try {
+      return await ApiManager.dio.get(
+        "${EndPoints.DELETE_POST}$postId",
+      ).then((response) {
+        return ;
+      });
+    } on Exception catch (failure) {
+      print(failure);
+    }
+  }
+
 }

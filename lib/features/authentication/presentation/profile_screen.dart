@@ -1,6 +1,7 @@
 import 'package:be_sheq_tamara_org_app/app/core/api/end_points.dart';
 import 'package:be_sheq_tamara_org_app/common_widgets/app_bar.dart';
 import 'package:be_sheq_tamara_org_app/features/authentication/domain/organization_model.dart';
+import 'package:be_sheq_tamara_org_app/features/authentication/presentation/providers/all_orgs_provider.dart';
 import 'package:be_sheq_tamara_org_app/features/authentication/presentation/providers/pars_num_provider.dart';
 import 'package:be_sheq_tamara_org_app/features/authentication/presentation/providers/profile_provider.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../../Constants/Color_Constants.dart';
+import '../../../app/org_data.dart';
 
 class Profile extends ConsumerStatefulWidget {
   const Profile({super.key});
@@ -23,8 +25,11 @@ class _ProfileState extends ConsumerState<Profile> {
   @override
   Widget build(BuildContext context) {
 
-    var profileDataNotifier = ref.watch(profileNotifier);
-    var profileData = ref.read(profileNotifier.notifier);
+    final orgIdProvider= ref.read(orgIdNotifier.notifier);
+    ref.watch<OrgData>(orgIdNotifier);
+
+    var allOrgsDataNotifier = ref.watch(allOrgsNotifier);
+    var allOrgsData = ref.read(allOrgsNotifier.notifier);
 
     var parsNumDataNotifier = ref.watch(parsNumNotifier);
     var parsNumData = ref.read(parsNumNotifier.notifier);
@@ -35,9 +40,13 @@ class _ProfileState extends ConsumerState<Profile> {
         textDirection: TextDirection.rtl,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
-          child: profileDataNotifier.when(
+          child: allOrgsDataNotifier.when(
               data: (_){
-                List<OrganizationModel> profile=profileData.profileDataList!;
+                List<OrganizationModel> orgs=allOrgsData.OrgsList!;
+
+                OrganizationModel profile = orgs.firstWhere(
+                      (org) => org.id == orgIdProvider.orgId,);
+
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -56,18 +65,18 @@ class _ProfileState extends ConsumerState<Profile> {
                         ),
                         child:  CircleAvatar(
                             radius: 100,
-                            backgroundImage: NetworkImage(EndPoints.BASEURL+profile[0].logoImg)
+                            backgroundImage: NetworkImage(EndPoints.BASEURL+profile.logoImg)
                         ),
                       ),
                     ),
                     const SizedBox(height: 10,),
-                     Center(child: Text(profile[0].orgName,
+                     Center(child: Text(profile.orgName,
                       style: const TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),),
                      Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Icon(Icons.location_on_outlined,color: mainGreen,),
-                        Text(profile[0].location,style: const TextStyle(fontSize: 16),)
+                        Text(profile.location,style: const TextStyle(fontSize: 16),)
                       ],
                     ),
                     const SizedBox(height: 15,),
@@ -115,8 +124,6 @@ class _ProfileState extends ConsumerState<Profile> {
                                     );
                                   }
                               ),
-
-
                               Image.asset('asset/icons/list.png',width: 50,),
                             ],
                           ),
@@ -160,7 +167,7 @@ class _ProfileState extends ConsumerState<Profile> {
                       ),
                     ),
                     const SizedBox(height: 15,),
-                    Text(profile[0].orgDec,style: const TextStyle(fontSize: 16),)
+                    Text(profile.orgDec,style: const TextStyle(fontSize: 16),)
                   ],
                 );
               },

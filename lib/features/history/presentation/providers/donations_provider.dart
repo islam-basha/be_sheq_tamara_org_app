@@ -5,26 +5,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/history_repository.dart';
 
-class DonationsNotifier extends AutoDisposeAsyncNotifier{
+class DonationsNotifier extends  AutoDisposeFamilyAsyncNotifier<void, String>{
 
   Object? key;
   List<DonationModel>? donationsList;
-  String org_id='org101';
 
   @override
-  FutureOr build() {
+  FutureOr build(String orgId) {
     key = Object();
     ref.onDispose(() {
       key = null;
     });
-    return showParticipations();
+    return showParticipations(orgId);
   }
 
-  Future showParticipations(
-      ) async {
+  Future showParticipations(String orgId) async {
     state = const AsyncValue.loading();
     final key = this.key;
-    donationsList = await HistoryRepository().showFutureOrgDonaions(org_id);
+    donationsList = await HistoryRepository().showFutureOrgDonaions(orgId);
     if (key != this.key) {
       return null;
     }
@@ -34,4 +32,5 @@ class DonationsNotifier extends AutoDisposeAsyncNotifier{
   }
 
 }
-final donationsNotifier = AutoDisposeAsyncNotifierProvider(DonationsNotifier.new);
+final donationsNotifier =
+AsyncNotifierProvider.autoDispose.family<DonationsNotifier,void, String>(DonationsNotifier.new);

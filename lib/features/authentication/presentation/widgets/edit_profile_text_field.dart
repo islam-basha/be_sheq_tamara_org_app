@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../Constants/Color_Constants.dart';
 
 class EditProfileTextField extends StatelessWidget {
-  final String labelText;
+  final TextEditingController labelText;
   final IconData icon;
   final TextInputType inputType;
   final double width;
@@ -25,6 +25,7 @@ class EditProfileTextField extends StatelessWidget {
         children: [
           Expanded(
             child: TextField(
+              controller: labelText,
               textDirection: TextDirection.rtl,
               textAlign: TextAlign.right,
               clipBehavior: Clip.antiAlias,
@@ -33,7 +34,6 @@ class EditProfileTextField extends StatelessWidget {
               onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
               decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintText: labelText,
                   hintStyle: const TextStyle(color: Colors.grey),
                   suffixIcon: Icon(icon,size: 20,color: const Color(0xffCCCCCC) ,),
                   contentPadding: const EdgeInsets.only(right: 5,bottom: 5)
