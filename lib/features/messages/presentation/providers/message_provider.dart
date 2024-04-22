@@ -4,26 +4,24 @@ import 'package:be_sheq_tamara_org_app/features/messages/data/message_repository
 import 'package:be_sheq_tamara_org_app/features/messages/domain/messages_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MessagesNotifier extends AutoDisposeAsyncNotifier{
+class MessagesNotifier extends AutoDisposeFamilyAsyncNotifier<void, String>{
 
   Object? key;
   List<MessageModel>? messagesList;
-  String org_id='org101';
 
   @override
-  FutureOr build() {
+  FutureOr build(String orgId) {
     key = Object();
     ref.onDispose(() {
       key = null;
     });
-    return showParticipations();
+    return showParticipations(orgId);
   }
 
-  Future showParticipations(
-      ) async {
+  Future showParticipations(String orgId) async {
     state = const AsyncValue.loading();
     final key = this.key;
-    messagesList = await MessagesRepository().showFutureOrgMessages(org_id);
+    messagesList = await MessagesRepository().showFutureOrgMessages(orgId);
     if (key != this.key) {
       return null;
     }
@@ -33,4 +31,4 @@ class MessagesNotifier extends AutoDisposeAsyncNotifier{
   }
 
 }
-final messagesNotifier = AutoDisposeAsyncNotifierProvider(MessagesNotifier.new);
+final messagesNotifier = AsyncNotifierProvider.autoDispose.family<MessagesNotifier, void, String>(MessagesNotifier.new);

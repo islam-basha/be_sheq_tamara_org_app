@@ -40,6 +40,8 @@ dependencies:
   motion_toast: ^2.8.0
   dio: ^5.4.1
   loading_animation_widget: ^1.2.1
+  intl: ^0.19.0
+  uuid: ^4.4.0
 
 
 

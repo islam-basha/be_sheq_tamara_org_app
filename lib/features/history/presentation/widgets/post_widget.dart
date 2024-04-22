@@ -4,11 +4,12 @@ import '../../../../Constants/Color_Constants.dart';
 import '../../../../common_widgets/default_button.dart';
 
 class Posts extends StatelessWidget {
-  const Posts({required this.post_image,required this.post_title,required this.post_text,required this.post_date,super.key});
+  const Posts({required this.post_image,required this.post_title,required this.post_text,required this.post_date,required this.function,super.key});
   final String post_image;
   final String post_title;
   final String post_date;
   final String post_text;
+  final VoidCallback function;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,15 +40,15 @@ class Posts extends StatelessWidget {
                   style: TextStyle(fontSize: 14, color: secondaryBeige),
                 ),
                 Text(post_date,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 14, color: Color(0xff95989A))),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Text(post_text,style: TextStyle(fontSize: 14,),),
-            defaultButton(radius: 10, function: (){}, text: 'حذف',background: Colors.redAccent,width: 90),
+            Text(post_text,style: const TextStyle(fontSize: 14,),),
+            defaultButton(radius: 10, function: function, text: 'حذف',background: Colors.redAccent,width: 90),
             Divider(color: Colors.grey.shade300,)
           ],
         ),

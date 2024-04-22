@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import '../../../../common_widgets/default_button.dart';
 
 class Campaigns extends StatelessWidget {
-  const Campaigns({required this.image_url,required this.title,required this.desc,required this.location,required this.date,super.key});
+  const Campaigns({required this.image_url,required this.title,required this.desc,required this.location,required this.date,required this.function,super.key});
   final String image_url;
   final String title;
   final String desc;
   final String location;
   final String date;
+  final VoidCallback function;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -61,10 +62,10 @@ class Campaigns extends StatelessWidget {
                     Text(date, style: const TextStyle(fontSize: 10,)),
                   ],
                 ),
-                defaultButton(radius: 10, function: (){}, text: 'حذف',background: Colors.redAccent,width: 90,height: 30),
+                defaultButton(radius: 10, function: function, text: 'حذف',background: Colors.redAccent,width: 90,height: 30),
               ],
             ),
-            SizedBox(height: 5,)
+            const SizedBox(height: 5,)
           ],
         ),
       ),
