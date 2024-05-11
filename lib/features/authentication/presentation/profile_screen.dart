@@ -147,25 +147,25 @@ class _ProfileState extends ConsumerState<Profile> {
                       ],
                     ),
                     const SizedBox(height: 15,),
-                    Center(
-                      child: GestureDetector(
-                        onTap:(){
-                          context.pushNamed('edit_profile');
-                        },
-                        child: Container(
-                          width: 300,
-                          height: 45,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: mainGreen
-                          ),
-                          child: const Text('تعديل بيانات المنظمة',style: TextStyle(
-                            fontSize: 18,color: Colors.white,
-                          ),),
-                        ),
-                      ),
-                    ),
+                    // Center(
+                    //   child: GestureDetector(
+                    //     onTap:(){
+                    //       context.pushNamed('edit_profile');
+                    //     },
+                    //     child: Container(
+                    //       width: 300,
+                    //       height: 45,
+                    //       alignment: Alignment.center,
+                    //       decoration: BoxDecoration(
+                    //           borderRadius: BorderRadius.circular(10),
+                    //           color: mainGreen
+                    //       ),
+                    //       child: const Text('تعديل بيانات المنظمة',style: TextStyle(
+                    //         fontSize: 18,color: Colors.white,
+                    //       ),),
+                    //     ),
+                    //   ),
+                    // ),
                     const SizedBox(height: 15,),
                     Text(profile.orgDec,style: const TextStyle(fontSize: 16),)
                   ],
